@@ -25,7 +25,10 @@ class FakeLLM:
         self.model = model
 
     def generate(self, prompt: str) -> FakeResponse:
-        time.sleep(0.15)
+        base = random.uniform(0.08, 0.22)
+        if random.random() < 0.08:
+            base += random.uniform(0.3, 0.7)
+        time.sleep(base)
         input_tokens = max(20, len(prompt) // 4)
         output_tokens = random.randint(80, 180)
         if STATE["cost_spike"]:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 import time
 
 from .incidents import STATE
@@ -17,7 +18,7 @@ def retrieve(message: str) -> list[str]:
     if STATE["tool_fail"]:
         raise RuntimeError("Vector store timeout")
     if STATE["rag_slow"]:
-        time.sleep(2.5)
+        time.sleep(random.uniform(2.0, 3.5))
     if STATE["quality_drop"]:
         return []
     lowered = message.lower()
