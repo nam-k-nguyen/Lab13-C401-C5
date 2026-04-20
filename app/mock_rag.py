@@ -5,9 +5,11 @@ import time
 from .incidents import STATE
 
 CORPUS = {
-    "refund": ["Refunds are available within 7 days with proof of purchase."],
-    "monitoring": ["Metrics detect incidents, traces localize them, logs explain root cause."],
-    "policy": ["Do not expose PII in logs. Use sanitized summaries only."],
+    "london": ["London is the capital of England. Top attractions: Big Ben, Tower of London, British Museum, Buckingham Palace."],
+    "visa": ["Vietnamese citizens need a UK Standard Visitor Visa. Apply online at least 3 weeks before travel."],
+    "transport": ["UK has extensive rail, bus and Underground networks. Oyster card covers all zones in London."],
+    "scotland": ["Scotland offers stunning highlands, Edinburgh Castle, and whisky distillery tours. Best visited May-September."],
+    "weather": ["UK weather is mild but unpredictable. Carry a raincoat year-round. Summer averages 18-22°C in London."],
 }
 
 
