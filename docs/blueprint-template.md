@@ -4,10 +4,10 @@
 
 ## 1. Team Metadata
 - [GROUP_NAME]: 
-- [REPO_URL]: 
+- [REPO_URL]: https://github.com/nam-k-nguyen/Lab13-C401-C5
 - [MEMBERS]:
   - Member A: [Name] | Role: Logging & PII
-  - Member B: [Name] | Role: Tracing & Enrichment
+  - Member B: Lê Hữu Hưng | Role: Tracing & Enrichment
   - Member C: [Name] | Role: SLO & Alerts
   - Member D: [Name] | Role: Load Test & Dashboard
   - Member E: [Name] | Role: Demo & Report
@@ -16,7 +16,7 @@
 
 ## 2. Group Performance (Auto-Verified)
 - [VALIDATE_LOGS_FINAL_SCORE]: /100
-- [TOTAL_TRACES_COUNT]: 
+- [TOTAL_TRACES_COUNT]: 20
 - [PII_LEAKS_FOUND]: 
 
 ---
@@ -26,8 +26,8 @@
 ### 3.1 Logging & Tracing
 - [EVIDENCE_CORRELATION_ID_SCREENSHOT]: [Path to image]
 - [EVIDENCE_PII_REDACTION_SCREENSHOT]: [Path to image]
-- [EVIDENCE_TRACE_WATERFALL_SCREENSHOT]: [Path to image]
-- [TRACE_WATERFALL_EXPLANATION]: (Briefly explain one interesting span in your trace)
+- [EVIDENCE_TRACE_WATERFALL_SCREENSHOT]: docs/screenshots/trace_waterfall.png
+- [TRACE_WATERFALL_EXPLANATION]: The single "run" span (L0, 150ms) captures the full agent pipeline: RAG retrieval + LLM generation. Metadata shows quality_score=0.8, doc_count=1, and query_preview with PII already redacted before logging.
 
 ### 3.2 Dashboard & SLOs
 - [DASHBOARD_6_PANELS_SCREENSHOT]: [Path to image]
@@ -59,9 +59,9 @@
 - [TASKS_COMPLETED]: 
 - [EVIDENCE_LINK]: (Link to specific commit or PR)
 
-### [MEMBER_B_NAME]
-- [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: 
+### Lê Hữu Hưng
+- [TASKS_COMPLETED]: Rewrote app/tracing.py to use Langfuse v4 API (observe, get_client, propagate_attributes). Updated app/agent.py to propagate tags (lab/qa/summary/model/env) and log metadata/usage per generation. Updated mock_rag.py corpus and sample_queries.jsonl for UK Travel Advisor theme. Verified 40 traces in Langfuse with correct tags and structure.
+- [EVIDENCE_LINK]: https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/7bf2caa
 
 ### [MEMBER_C_NAME]
 - [TASKS_COMPLETED]: 
