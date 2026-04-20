@@ -6,11 +6,12 @@
 - [GROUP_NAME]: C401 - C5
 - [REPO_URL]: https://github.com/nam-k-nguyen/Lab13-C401-C5
 - [MEMBERS]:
-  - Member A: [Name] | Role: Logging & PII
-  - Member B: Lê Hữu Hưng | Role: Tracing & Enrichment
-  - Member C: [Name] | Role: SLO & Alerts
-  - Member D: [Name] | Role: Load Test & Dashboard
-  - Member E: [Name] | Role: Demo & Report
+  - Member A: [Nguyễn khánh Nam]| Role: Logging & PII
+  - Member B: [Lê Hữu Hưng] | Role: Tracing &  tags
+  - Member C: [Nguyễn Minh Hiếu]| Role: SLO & Alerts
+  - Member D: [Chu Minh Quân] | Role: load test + incident injection
+  - Member E: [Đỗ Minh Phúc] | Role: dashboard + evidence
+  - Member F: [Lê Tú Nam] | Role: Demo & Report
 
 ---
 
@@ -78,7 +79,9 @@
 ### [MEMBER_E_NAME]
 - [TASKS_COMPLETED]: 
 - [EVIDENCE_LINK]: 
-
+### LÊ TÚ NAM
+- FROUP REPORT
+- https://github.com/nam-k-nguyen/Lab13-C401-C5/edit/main/docs/blueprint-template.md
 ---
 
 ## 6. Bonus Items (Optional)
