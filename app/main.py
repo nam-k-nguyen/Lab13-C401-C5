@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+import json
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from structlog.contextvars import bind_contextvars
 
 from .agent import LabAgent
@@ -43,6 +45,27 @@ async def health() -> dict:
 @app.get("/metrics")
 async def metrics() -> dict:
     return snapshot()
+
+
+@app.get("/logs")
+async def get_logs(limit: int = 500) -> list[dict]:
+    log_path = Path(os.getenv("LOG_PATH", "data/logs.jsonl"))
+    if not log_path.exists():
+        return []
+    records: list[dict] = []
+    for line in log_path.read_text(encoding="utf-8").splitlines()[-limit:]:
+        if not line.strip():
+            continue
+        try:
+            records.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+    return records
+
+
+@app.get("/dashboard")
+async def dashboard() -> FileResponse:
+    return FileResponse("app/static/dashboard.html")
 
 
 @app.post("/chat", response_model=ChatResponse)
