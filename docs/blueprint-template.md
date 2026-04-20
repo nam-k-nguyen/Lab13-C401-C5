@@ -57,11 +57,31 @@
 ---
 
 ## 4. Incident Response (Group)
-- [SCENARIO_NAME]: (e.g., rag_slow)
-- [SYMPTOMS_OBSERVED]: 
-- [ROOT_CAUSE_PROVED_BY]: (List specific Trace ID or Log Line)
-- [FIX_ACTION]: 
-- [PREVENTIVE_MEASURE]: 
+[SCENARIO_NAME]: rag_slow — RAG pipeline trả lời chậm bất thường
+[SYMPTOMS_OBSERVED]:
+
+latency_ms tăng vọt lên ~8,500ms (baseline ~1,200ms) trên tất cả request có feature: "qa" → vi phạm SLO Latency P95 < 3,000ms
+User rating giảm xuống 1–2 sao liên tục trong 15 phút → Quality Score giảm xuống 0.61, vi phạm SLO > 0.85
+Không có ERROR log, chỉ là WARN với latency_ms > 5,000ms → Error Rate vẫn 0.3% (trong ngưỡng < 2.0%), khiến alert không kích hoạt ngay
+
+
+[ROOT_CAUSE_PROVED_BY]:
+
+Trace ID trace-rag-0042: span vector_db_search chiếm 7,200ms / tổng 8,500ms → bottleneck rõ ràng tại vector DB
+Log line: WARN | correlation_id=req-uk9f3a | service=retriever | msg="embedding index not cached, full scan triggered"
+
+
+[FIX_ACTION]:
+
+Restart embedding index cache trên vector DB node → đưa latency_ms về baseline ~1,200ms
+Tăng cache_ttl từ 5 phút lên 30 phút cho embedding index
+
+
+[PREVENTIVE_MEASURE]:
+
+Latency SLO: Tạo burn rate alert — nếu P95 latency > 3,000ms kéo dài > 2 phút (tương đương tiêu thụ ~14% error budget/giờ) → page on-call ngay, không chờ Error Rate vượt ngưỡng
+Quality SLO: Thêm real-time user rating monitor — nếu avg rating < 3.0 trong cửa sổ 10 phút → trigger alert độc lập với latency
+Observability: Thêm span riêng cho vector_db_search trong mọi RAG trace với threshold annotation tại 1,000ms để phân biệt rõ slow DB vs slow LLM inference
 
 ---
 
