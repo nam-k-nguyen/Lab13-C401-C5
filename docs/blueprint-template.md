@@ -63,9 +63,13 @@
 - [TASKS_COMPLETED]: Rewrote app/tracing.py to use Langfuse v4 API (observe, get_client, propagate_attributes). Updated app/agent.py to propagate tags (lab/qa/summary/model/env) and log metadata/usage per generation. Updated mock_rag.py corpus and sample_queries.jsonl for UK Travel Advisor theme. Verified 20 traces in Langfuse with correct tags and structure.
 - [EVIDENCE_LINK]: - https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/7bf2caa
 
-### [MEMBER_C_NAME]
+### Nguyen Minh Hieu
 - [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: 
+    - Defined and configured Service Level Objectives (SLO) for the UK Travel Advisor system in `config/slo.yaml`.
+    - Implemented 5 critical alert rules (High Latency, Error Rate, Cost Spike, Low Quality, and Traffic Spike) in `config/alert_rules.yaml`.
+    - Authored comprehensive operational runbooks for incident mitigation in `docs/alerts.md`.
+    - Synchronized monitoring thresholds with SLO targets to ensure high system observability.
+- [EVIDENCE_LINK]: [Branch hieu-slo-alert | Commit c0b1257](https://github.com/nam-k-nguyen/Lab13-C401-C5/pull/new/hieu-slo-alert)
 
 ### [MEMBER_D_NAME]
 - [TASKS_COMPLETED]: 
