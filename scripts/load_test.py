@@ -7,7 +7,6 @@ from pathlib import Path
 import httpx
 
 BASE_URL = "http://127.0.0.1:8000"
-QUERIES = Path("data/sample_queries.jsonl")
 
 
 def send_request(client: httpx.Client, payload: dict) -> None:
@@ -23,9 +22,15 @@ def send_request(client: httpx.Client, payload: dict) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent requests")
+    parser.add_argument("--queries", type=str, default="data/sample_queries.jsonl", help="Path to queries file (.jsonl)")
     args = parser.parse_args()
 
-    lines = [line for line in QUERIES.read_text(encoding="utf-8").splitlines() if line.strip()]
+    queries_path = Path(args.queries)
+    if not queries_path.exists():
+        print(f"Error: Queries file not found at {queries_path}")
+        return None
+
+    lines = [line for line in queries_path.read_text(encoding="utf-8").splitlines() if line.strip()]
     
     with httpx.Client(timeout=30.0) as client:
         if args.concurrency > 1:
