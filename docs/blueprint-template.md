@@ -72,9 +72,9 @@
     - Synchronized monitoring thresholds with SLO targets to ensure high system observability.
 - [EVIDENCE_LINK]: [Branch hieu-slo-alert | Commit c0b1257](https://github.com/nam-k-nguyen/Lab13-C401-C5/pull/new/hieu-slo-alert)
 
-### [MEMBER_D_NAME]
-- [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: 
+### Chu Minh Quan
+- [TASKS_COMPLETED]: Tweak scripts to run any scenario from data/incidents.json and allow to test other test case files by modifying the script. Run tests with different incident injections and verify the results on dashboard.  
+- [EVIDENCE_LINK]: https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/040a253895977f86560429fa9d48ab801f530d7f
 
 ### [MEMBER_E_NAME]
 - [TASKS_COMPLETED]: 
