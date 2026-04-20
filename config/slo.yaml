@@ -3,14 +3,17 @@ window: 28d
 slis:
   latency_p95_ms:
     objective: 3000
-    target: 99.5
-    note: Replace with your group's target
-  error_rate_pct:
-    objective: 2
     target: 99.0
+    note: Đảm bảo khách du lịch nhận được phản hồi nhanh khi đang dùng 4G/Roaming tại Anh.
+  error_rate_pct:
+    objective: 2.0
+    target: 99.0
+    note: Hạn chế tối đa lỗi để đảm bảo uy tín thông tin về Visa và lịch trình.
   daily_cost_usd:
-    objective: 2.5
+    objective: 20.0
     target: 100.0
+    note: Kiểm soát chi phí API hàng ngày để tối ưu ngân sách vận hành của nhóm.
   quality_score_avg:
-    objective: 0.75
+    objective: 0.85
     target: 95.0
+    note: Thông tin tư vấn du lịch Anh cần độ chính xác cao (địa danh, giờ tàu, thời tiết).
