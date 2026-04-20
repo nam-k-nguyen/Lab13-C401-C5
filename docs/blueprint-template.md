@@ -3,7 +3,7 @@
 > **Instruction**: Fill in all sections below. This report is designed to be parsed by an automated grading assistant. Ensure all tags (e.g., `[GROUP_NAME]`) are preserved.
 
 ## 1. Team Metadata
-- [GROUP_NAME]: 
+- [GROUP_NAME]: C401 - C5
 - [REPO_URL]: https://github.com/nam-k-nguyen/Lab13-C401-C5
 - [MEMBERS]:
   - Member A: [Name] | Role: Logging & PII
@@ -60,8 +60,8 @@
 - [EVIDENCE_LINK]: (Link to specific commit or PR)
 
 ### Lê Hữu Hưng
-- [TASKS_COMPLETED]: Rewrote app/tracing.py to use Langfuse v4 API (observe, get_client, propagate_attributes). Updated app/agent.py to propagate tags (lab/qa/summary/model/env) and log metadata/usage per generation. Updated mock_rag.py corpus and sample_queries.jsonl for UK Travel Advisor theme. Verified 40 traces in Langfuse with correct tags and structure.
-- [EVIDENCE_LINK]: https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/7bf2caa
+- [TASKS_COMPLETED]: Rewrote app/tracing.py to use Langfuse v4 API (observe, get_client, propagate_attributes). Updated app/agent.py to propagate tags (lab/qa/summary/model/env) and log metadata/usage per generation. Updated mock_rag.py corpus and sample_queries.jsonl for UK Travel Advisor theme. Verified 20 traces in Langfuse with correct tags and structure.
+- [EVIDENCE_LINK]: - https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/7bf2caa
 
 ### [MEMBER_C_NAME]
 - [TASKS_COMPLETED]: 
