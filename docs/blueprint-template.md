@@ -16,7 +16,7 @@
 ---
 
 ## 2. Group Performance (Auto-Verified)
-- [VALIDATE_LOGS_FINAL_SCORE]: /100
+- [VALIDATE_LOGS_FINAL_SCORE]: 100/100
 - [TOTAL_TRACES_COUNT]: 20
 - [PII_LEAKS_FOUND]: 
 
@@ -80,7 +80,7 @@
 - [TASKS_COMPLETED]: 
 - [EVIDENCE_LINK]: 
 ### LÊ TÚ NAM
-- FROUP REPORT
+- GROUP REPORT
 - https://github.com/nam-k-nguyen/Lab13-C401-C5/edit/main/docs/blueprint-template.md
 ---
 
