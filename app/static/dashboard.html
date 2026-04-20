@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Day 13 Observability Dashboard</title>
+<title>UK Travel Advisor — Observability Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 <style>
@@ -81,8 +81,8 @@
 <body>
 <header>
   <div>
-    <h1>Day 13 Observability Dashboard</h1>
-    <div class="sub">FastAPI agent · structlog · Langfuse</div>
+    <h1>UK Travel Advisor — Observability Dashboard</h1>
+    <div class="sub">Chatbot tư vấn du lịch Anh · FastAPI · RAG · Langfuse</div>
   </div>
   <div class="status">
     <span><span class="dot"></span>Live</span>
@@ -102,7 +102,7 @@
 
   <div class="panel">
     <div class="panel-head"><h2>2. Traffic<span class="unit">req / min</span></h2></div>
-    <div class="slo">&nbsp;</div>
+    <div class="slo">Alert: &gt; 50 req / 5m</div>
     <div class="chart-wrap"><canvas id="chart-traffic"></canvas></div>
   </div>
 
@@ -113,8 +113,8 @@
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h2>4. Cost<span class="unit">cumulative USD</span></h2></div>
-    <div class="slo">Budget: &lt; $20 / day</div>
+    <div class="panel-head"><h2>4. Cost<span class="unit">cumulative USD · avg/req</span></h2></div>
+    <div class="slo">Budget: &lt; $20/day · Alert: avg/req &lt; $1</div>
     <div class="chart-wrap"><canvas id="chart-cost"></canvas></div>
   </div>
 
@@ -233,6 +233,7 @@ function initCharts() {
     type: "bar",
     data: { datasets: [{ label: "Requests", data: [], backgroundColor: "#58a6ff" }] },
     options: { responsive: true, maintainAspectRatio: false, animation: false, scales: commonScales(), plugins: commonPlugins() },
+    plugins: [sloLinePlugin(50, "#d29922")],
   });
 
   charts.errors = new Chart(document.getElementById("chart-errors"), {
@@ -244,8 +245,19 @@ function initCharts() {
 
   charts.cost = new Chart(document.getElementById("chart-cost"), {
     type: "line",
-    data: { datasets: [{ label: "Cumulative $", data: [], borderColor: "#3fb950", backgroundColor: "rgba(63,185,80,0.2)", fill: true, tension: 0.3, pointRadius: 2 }] },
-    options: { responsive: true, maintainAspectRatio: false, animation: false, scales: commonScales(), plugins: commonPlugins() },
+    data: { datasets: [
+      { label: "Cumulative $",      data: [], borderColor: "#3fb950", backgroundColor: "rgba(63,185,80,0.15)", fill: true, tension: 0.3, pointRadius: 2, yAxisID: "y" },
+      { label: "Avg $/req (bucket)", data: [], borderColor: "#f85149", tension: 0.3, pointRadius: 2, yAxisID: "y1" },
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      scales: {
+        x: commonScales().x,
+        y:  { beginAtZero: true, position: "left",  ticks: { color: "#3fb950" }, grid: { color: "#2a3142" }, title: { display: true, text: "cumulative $", color: "#3fb950", font: { size: 10 } } },
+        y1: { beginAtZero: true, position: "right", ticks: { color: "#f85149" }, grid: { drawOnChartArea: false },  title: { display: true, text: "avg $/req",   color: "#f85149", font: { size: 10 } } },
+      },
+      plugins: commonPlugins(),
+    },
     plugins: [sloLinePlugin(20, "#d29922")],
   });
 
@@ -271,7 +283,7 @@ async function refresh() {
     const buckets = aggregate(records);
 
     const p50 = [], p95 = [], p99 = [];
-    const traffic = [], errs = [], cost = [], tokIn = [], tokOut = [];
+    const traffic = [], errs = [], cost = [], costAvg = [], tokIn = [], tokOut = [];
     let cum = 0;
     for (const [ts, b] of buckets) {
       const t = new Date(ts);
@@ -283,6 +295,7 @@ async function refresh() {
       errs.push({ x: t, y: total ? +((b.err / total) * 100).toFixed(2) : 0 });
       cum += b.cost;
       cost.push({ x: t, y: +cum.toFixed(6) });
+      costAvg.push({ x: t, y: b.latencies.length ? +(b.cost / b.latencies.length).toFixed(6) : 0 });
       tokIn.push({ x: t, y: b.tokIn });
       tokOut.push({ x: t, y: b.tokOut });
     }
@@ -299,6 +312,7 @@ async function refresh() {
     charts.errors.update();
 
     charts.cost.data.datasets[0].data = cost;
+    charts.cost.data.datasets[1].data = costAvg;
     charts.cost.update();
 
     charts.tokens.data.datasets[0].data = tokIn;
