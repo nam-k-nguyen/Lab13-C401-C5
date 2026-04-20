@@ -5,7 +5,7 @@ import re
 
 PII_PATTERNS: dict[str, str] = {
     "email": r"[\w\.-]+@[\w\.-]+\.\w+",
-    "phone_vn": r"(?:\+84|0)[ \.-]?\d{3}[ \.-]?\d{3}[ \.-]?\d{3,4}", # Matches 090 123 4567, 090.123.4567, etc.
+    "phone_vn": r"(?:\+84|0)[ \.-]?\d{3}[ \.-]?\d{3}[ \.-]?\d{3,4}",  # Matches 090 123 4567, 090.123.4567, etc.
     "cccd": r"\b\d{12}\b",
     "credit_card": r"\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b",
     # ✅ DONE: Add more patterns (e.g., Passport, Vietnamese address keywords)
@@ -15,6 +15,12 @@ PII_PATTERNS: dict[str, str] = {
     "address_vn": r"\b(?:duong|đường|phuong|phường|quan|quận|huyen|huyện|tp\.?|thành phố)\b[\w\s]*",
     # Date of birth (DOB): dd/mm/yyyy or dd-mm-yyyy
     "dob": r"\b\d{2}[/-]\d{2}[/-]\d{4}\b",
+    # VN plate number:
+    "vn_plate": r"\b\d{2}[A-Z]-\d{3}\.\d{2}\b",
+    # US plate number:
+    # "us_plate": r"\b[A-Z]{1,3}[-\s]?\d{1,4}|[A-Z]{2}\d{3}[A-Z]{2}|\d{1,4}[-\s]?[A-Z]{1,3}\b",
+    # Social media handle:
+    "social_media": r"(?<!\w)@[A-Za-z0-9_\.]{1,30}\b",
 }
 
 
@@ -25,7 +31,7 @@ def scrub_text(text: str) -> str:
     return safe
 
 
-def summarize_text(text: str, max_len: int = 80) -> str:
+def summarize_text(text: str, max_len: int = 200) -> str:
     safe = scrub_text(text).strip().replace("\n", " ")
     return safe[:max_len] + ("..." if len(safe) > max_len else "")
 
