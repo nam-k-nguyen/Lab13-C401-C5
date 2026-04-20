@@ -5,7 +5,7 @@
 ## 1. Team Metadata
 
 - [GROUP_NAME]: C401 - C5
-- **[REPO_URL]**: https://github.com/nam-k-nguyen/Lab13-C401-C5
+- [REPO_URL]: https://github.com/nam-k-nguyen/Lab13-C401-C5
 - [MEMBERS]:
   - Member A: [Nguyễn khánh Nam]| Role: Logging & PII
   - Member B: [Lê Hữu Hưng] | Role: Tracing & tags
@@ -18,9 +18,9 @@
 
 ## 2. Group Performance (Auto-Verified)
 
-- **[VALIDATE_LOGS_FINAL_SCORE]**: 100/100
-- **[TOTAL_TRACES_COUNT]**: 20
-- **[PII_LEAKS_FOUND]**: None
+- [VALIDATE_LOGS_FINAL_SCORE]: 100/100
+- [TOTAL_TRACES_COUNT]: 20
+- [PII_LEAKS_FOUND]: None
 
 ---
 
@@ -28,38 +28,38 @@
 
 ### 3.1 Logging & Tracing
 
-- [EVIDENCE_CORRELATION_ID_SCREENSHOT] `<br><img src="screenshots/correlation_id.png" alt="EVIDENCE_CORRELATION_ID_SCREENSHOT" width=400/>`
-- [EVIDENCE_PII_REDACTION_SCREENSHOT] `<br><img src="screenshots/pii_log.png" alt="EVIDENCE_PII_REDACTION_SCREENSHOT" width=400/>`
-- [EVIDENCE_TRACE_WATERFALL_SCREENSHOT] `<br><img src="screenshots/trace_waterfall.png" alt="EVIDENCE_TRACE_WATERFALL_SCREENSHOT" width=400/>`
+- [EVIDENCE_CORRELATION_ID_SCREENSHOT]: ![correlation_id](screenshots/correlation_id.png)
+- [EVIDENCE_PII_REDACTION_SCREENSHOT]: ![pii_log](screenshots/pii_log.png)
+- [EVIDENCE_TRACE_WATERFALL_SCREENSHOT]: ![trace_waterfall](screenshots/trace_waterfall.png)
 - [TRACE_WATERFALL_EXPLANATION]: The single "run" span (L0, 150ms) captures the full agent pipeline: RAG retrieval + LLM generation. Metadata shows quality_score=0.8, doc_count=1, and query_preview with PII already redacted before logging.
 
 ### 3.2 Dashboard & SLOs
 
-- [DASHBOARD_6_PANELS_SCREENSHOT] `<br><img src="screenshots/dashboard_full.png" alt="DASHBOARD_6_PANELS_SCREENSHOT" width=700/>`
+- [DASHBOARD_6_PANELS_SCREENSHOT]: ![dashboard](screenshots/dashboard_full.png)
 
 [SLO_TABLE]:
 
 | SLI           |    Target | Window |                   Current Value | Status |
-| ------------- | --------: | ------ | ------------------------------: | :----: | --- | --- |
+| ------------- | --------: | ------ | ------------------------------: | :----: |
 | Latency P95   | < 3000 ms | 28d    |                      **740 ms** |   ✅   |
 | Error Rate    |    < 2.0% | 28d    |          **0%** (0/30 requests) |   ✅   |
-| Daily Cost    |  < $20.00 | 28d    |   **$0.0626** (session to date) |   ✅   |     |     |
+| Daily Cost    |  < $20.00 | 28d    |   **$0.0626** (session to date) |   ✅   |
 | Quality Score |    > 0.85 | 28d    | **0.86** (avg over 30 requests) |   ✅   |
 
 > Số liệu đo từ endpoint `/metrics` (in-memory snapshot). P50=166ms · P95=740ms · P99=768ms — chứng minh formula percentile đã được fix để 3 giá trị tách biệt với n=30 samples. Tất cả SLI đang trong ngưỡng xanh (Healthy).
 
 ### 3.3 Alerts & Runbook
 
-- [ALERT_RULES_SCREENSHOT] `<br><img src="screenshots/alert_rules.jpg" alt="ALERT_RULES_SCREENSHOT" width=600/>`
-- **[SAMPLE_RUNBOOK_LINK]**: [docs/alerts.md#1-high-latency-p95](alerts.md#1-high-latency-p95-bắt-lỗi-rag_slow)
+- [ALERT_RULES_SCREENSHOT]: ![alert_rules](screenshots/alert_rules.jpg)
+- [SAMPLE_RUNBOOK_LINK]: [docs/alerts.md#1-high-latency-p95-bắt-lỗi-rag_slow](alerts.md#1-high-latency-p95-bắt-lỗi-rag_slow)
 
 [ALERTS_LIST]:
 
-1. **High Latency P95**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L3)
-2. **High Error Rate**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L14)
-3. **Cost Budget Spike**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L25)
-4. **Low Quality Score**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L36)
-5. **Traffic Spike**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L47)
+1. **High Latency P95**: [Runbook](alerts.md#1-high-latency-p95-bắt-lỗi-rag_slow)
+2. **High Error Rate**: [Runbook](alerts.md#2-high-error-rate-bắt-lỗi-tool_fail)
+3. **Cost Budget Spike**: [Runbook](alerts.md#3-cost-budget-spike-bắt-lỗi-cost_spike)
+4. **Low Quality Score**: [Runbook](alerts.md#4-low-quality-score-chất-lượng-kém)
+5. **Traffic Spike**: [Runbook](alerts.md#5-traffic-spike-lưu-lượng-tăng-đột-biến)
 
 ---
 
@@ -100,7 +100,7 @@ Observability: Thêm span riêng cho vector_db_search trong mọi RAG trace vớ
   - Ensured PII scrubber is active in the logging pipeline
   - Updated and fixed correlation ID propagation in middleware.py
   - Ensured contextvars are cleared per request in middleware
-- [EVIDENCE_LINK][EVIDENCE_LINK]:
+- [EVIDENCE_LINK]:
   - [523efe0](https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/523efe055f4a067aeeabf5cc43af77953c567466)
   - [17cca4e](https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/17cca4e001146f7b03b3dcac494c58e838abac59)
   - [af68ea4](https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/af68ea4d93c5c268d3d833fd2ded3eb0433d761e)
@@ -108,7 +108,7 @@ Observability: Thêm span riêng cho vector_db_search trong mọi RAG trace vớ
 ### Lê Hữu Hưng
 
 - [TASKS_COMPLETED]: Rewrote app/tracing.py to use Langfuse v4 API (observe, get_client, propagate_attributes). Updated app/agent.py to propagate tags (lab/qa/summary/model/env) and log metadata/usage per generation. Updated mock_rag.py corpus and sample_queries.jsonl for UK Travel Advisor theme. Verified 20 traces in Langfuse with correct tags and structure.
-- [EVIDENCE_LINK][EVIDENCE_LINK]: - https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/7bf2caa
+- [EVIDENCE_LINK]: https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/7bf2caa
 
 ### Nguyen Minh Hieu
 
@@ -117,7 +117,7 @@ Observability: Thêm span riêng cho vector_db_search trong mọi RAG trace vớ
   - Implemented 5 critical alert rules (High Latency, Error Rate, Cost Spike, Low Quality, and Traffic Spike) in `config/alert_rules.yaml`.
   - Authored comprehensive operational runbooks for incident mitigation in `docs/alerts.md`.
   - Synchronized monitoring thresholds with SLO targets to ensure high system observability.
-- [EVIDENCE_LINK][EVIDENCE_LINK]: [Branch hieu-slo-alert | Commit c0b1257](https://github.com/nam-k-nguyen/Lab13-C401-C5/pull/new/hieu-slo-alert)
+- [EVIDENCE_LINK]: [Commit c0b1257](https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/c0b1257)
 
 ### Chu Minh Quan
 
