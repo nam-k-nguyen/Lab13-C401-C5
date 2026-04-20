@@ -18,7 +18,7 @@
 ## 2. Group Performance (Auto-Verified)
 - [VALIDATE_LOGS_FINAL_SCORE]: 100/100
 - [TOTAL_TRACES_COUNT]: 20
-- [PII_LEAKS_FOUND]: 
+- [PII_LEAKS_FOUND]: None
 
 ---
 
