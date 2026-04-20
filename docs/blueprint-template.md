@@ -31,17 +31,28 @@
 - [TRACE_WATERFALL_EXPLANATION]: The single "run" span (L0, 150ms) captures the full agent pipeline: RAG retrieval + LLM generation. Metadata shows quality_score=0.8, doc_count=1, and query_preview with PII already redacted before logging.
 
 ### 3.2 Dashboard & SLOs
-- [DASHBOARD_6_PANELS_SCREENSHOT]: [Path to image]
-- [SLO_TABLE]:
+- [DASHBOARD_6_PANELS_SCREENSHOT]: screenshots/dashboard_full.png
+
+[SLO_TABLE]:
+
 | SLI | Target | Window | Current Value |
 |---|---:|---|---:|
-| Latency P95 | < 3000ms | 28d | |
-| Error Rate | < 2% | 28d | |
-| Cost Budget | < $2.5/day | 1d | |
+| Latency P95 | < 3000ms | 28d | [Xem Dashboard] |
+| Error Rate | < 2.0% | 28d | [Xem Dashboard] |
+| Daily Cost | < $20.0 | 28d | [Xem Dashboard] |
+| Quality Score | > 0.85 | 28d | [Xem Dashboard] |
 
 ### 3.3 Alerts & Runbook
-- [ALERT_RULES_SCREENSHOT]: [Path to image]
-- [SAMPLE_RUNBOOK_LINK]: [docs/alerts.md#L...]
+[ALERT_RULES_SCREENSHOT]: screenshots/alert_rules.png
+[SAMPLE_RUNBOOK_LINK]: [docs/alerts.md#1-high-latency-p95](file:///e:/Lab13-C401-C5/docs/alerts.md#L3)
+
+[ALERTS_LIST]:
+
+1. **High Latency P95**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L3)
+2. **High Error Rate**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L14)
+3. **Cost Budget Spike**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L25)
+4. **Low Quality Score**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L36)
+5. **Traffic Spike**: [Runbook](file:///e:/Lab13-C401-C5/docs/alerts.md#L47)
 
 ---
 
@@ -77,7 +88,7 @@
 - [EVIDENCE_LINK]: https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/040a253895977f86560429fa9d48ab801f530d7f/
 
 
-### [MEMBER_E_NAME]
+### Đỗ Minh Phúc
 - [TASKS_COMPLETED]: 
 - [EVIDENCE_LINK]: 
 ### LÊ TÚ NAM
