@@ -25,8 +25,8 @@
 ## 3. Technical Evidence (Group)
 
 ### 3.1 Logging & Tracing
-- [EVIDENCE_CORRELATION_ID_SCREENSHOT]: [Path to image]
-- [EVIDENCE_PII_REDACTION_SCREENSHOT]: [Path to image]
+- [EVIDENCE_CORRELATION_ID_SCREENSHOT] <br><img src="screenshots/correlation_id.png" alt="EVIDENCE_CORRELATION_ID_SCREENSHOT" width=400/>
+- [EVIDENCE_PII_REDACTION_SCREENSHOT] <br><img src="screenshots/pii_log.png" alt="EVIDENCE_PII_REDACTION_SCREENSHOT" width=400/>
 - [EVIDENCE_TRACE_WATERFALL_SCREENSHOT]: docs/screenshots/trace_waterfall.png
 - [TRACE_WATERFALL_EXPLANATION]: The single "run" span (L0, 150ms) captures the full agent pipeline: RAG retrieval + LLM generation. Metadata shows quality_score=0.8, doc_count=1, and query_preview with PII already redacted before logging.
 
@@ -67,9 +67,17 @@
 
 ## 5. Individual Contributions & Evidence
 
-### [MEMBER_A_NAME]
-- [TASKS_COMPLETED]: 
-- [EVIDENCE_LINK]: (Link to specific commit or PR)
+### Nguyễn Khánh Nam
+- [TASKS_COMPLETED]:
+  - Implemented and registered PII scrubbing patterns in pii.py and logging_config.py
+  - Added/updated regex for Vietnamese passport, address, DOB, etc.
+  - Ensured PII scrubber is active in the logging pipeline
+  - Updated and fixed correlation ID propagation in middleware.py
+  - Ensured contextvars are cleared per request in middleware
+- [EVIDENCE_LINK]:
+  - [523efe0](https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/523efe055f4a067aeeabf5cc43af77953c567466)
+  - [17cca4e](https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/17cca4e001146f7b03b3dcac494c58e838abac59)
+  - [af68ea4](https://github.com/nam-k-nguyen/Lab13-C401-C5/commit/af68ea4d93c5c268d3d833fd2ded3eb0433d761e)
 
 ### Lê Hữu Hưng
 - [TASKS_COMPLETED]: Rewrote app/tracing.py to use Langfuse v4 API (observe, get_client, propagate_attributes). Updated app/agent.py to propagate tags (lab/qa/summary/model/env) and log metadata/usage per generation. Updated mock_rag.py corpus and sample_queries.jsonl for UK Travel Advisor theme. Verified 20 traces in Langfuse with correct tags and structure.
