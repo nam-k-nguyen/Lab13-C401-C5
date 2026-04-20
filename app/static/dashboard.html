@@ -43,6 +43,19 @@
     animation: pulse 2s infinite;
   }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .health-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 6px;
+    font-size: 12px; font-weight: 600;
+    border: 1px solid;
+  }
+  .health-badge.healthy   { color: var(--green);  border-color: var(--green);  background: rgba(63,185,80,0.08); }
+  .health-badge.degraded  { color: var(--yellow); border-color: var(--yellow); background: rgba(210,153,34,0.08); }
+  .health-badge.critical  { color: var(--red);    border-color: var(--red);    background: rgba(248,81,73,0.08); animation: pulse 1.5s infinite; }
+  .health-badge .dot-sm {
+    width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+  }
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -51,22 +64,41 @@
   @media (max-width: 1200px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px)  { .grid { grid-template-columns: 1fr; } }
   .panel {
-    background: var(--panel);
+    background: linear-gradient(180deg, #1a1f2e 0%, #161b27 100%);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px;
+    border-radius: 10px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    min-height: 240px;
+    min-height: 260px;
+    transition: border-color 0.2s, transform 0.2s;
   }
-  .panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .panel:hover { border-color: #3a4258; transform: translateY(-1px); }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 4px;
+  }
   .panel h2 {
-    font-size: 12px; font-weight: 600; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.6px;
+    font-size: 11px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.7px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .panel .icon {
+    width: 18px; height: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    background: rgba(88,166,255,0.1);
+    border-radius: 4px;
   }
   .unit { font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 4px; }
+  .current-value {
+    font-size: 24px; font-weight: 700; color: var(--text);
+    margin: 4px 0 2px; line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .current-value .sub { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 6px; }
   .slo { font-size: 11px; color: var(--yellow); margin-bottom: 6px; }
-  .chart-wrap { position: relative; flex: 1; min-height: 180px; }
+  .chart-wrap { position: relative; flex: 1; min-height: 170px; }
   .gauge {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     flex: 1; padding: 12px 0;
@@ -76,6 +108,64 @@
   .good { color: var(--green); }
   .warn { color: var(--yellow); }
   .bad  { color: var(--red); }
+  button.refresh-btn {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  button.refresh-btn:hover { background: var(--border); }
+  button.refresh-btn:active { background: var(--blue); color: white; }
+
+  .alerts-bar {
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .alerts-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .alerts-title {
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600;
+  }
+  .alerts-count { font-size: 12px; color: var(--muted); }
+  .alerts-count.firing { color: var(--red); font-weight: 700; }
+  .alerts-count.firing::before {
+    content: ""; display: inline-block; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--red); margin-right: 6px;
+    box-shadow: 0 0 8px var(--red); animation: pulse 1.2s infinite;
+  }
+  .no-alerts { color: var(--green); font-size: 13px; padding: 2px 0; }
+  .alert {
+    display: flex; gap: 10px; align-items: center;
+    padding: 6px 10px; margin-top: 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  .alert-firing  { background: rgba(248,81,73,0.12);  border-left: 3px solid var(--red); }
+  .alert-warning { background: rgba(210,153,34,0.12); border-left: 3px solid var(--yellow); }
+  .alert .severity { font-weight: 700; min-width: 28px; }
+  .alert-firing .severity  { color: var(--red); }
+  .alert-warning .severity { color: var(--yellow); }
+  .alert .name { font-weight: 600; min-width: 160px; color: var(--text); }
+  .alert .desc { color: var(--muted); flex: 1; }
+  .alert .duration { color: var(--muted); font-size: 11px; }
+  .alert .runbook { color: var(--blue); text-decoration: none; font-size: 11px; }
+  .alert .runbook:hover { text-decoration: underline; }
+  .panel-alerting {
+    border-color: var(--red) !important;
+    box-shadow: 0 0 0 1px var(--red), 0 0 12px rgba(248,81,73,0.3);
+  }
 </style>
 </head>
 <body>
@@ -85,47 +175,62 @@
     <div class="sub">Chatbot tư vấn du lịch Anh · FastAPI · RAG · Langfuse</div>
   </div>
   <div class="status">
+    <span class="health-badge healthy" id="health-badge"><span class="dot-sm"></span><span id="health-text">Healthy</span></span>
     <span><span class="dot"></span>Live</span>
     <span>Auto-refresh <b>30s</b></span>
     <span>Window <b>30 min</b></span>
     <span>Last update: <b id="last-update">—</b></span>
     <span>Records: <b id="record-count">0</b></span>
+    <button class="refresh-btn" id="refresh-btn" title="Refresh ngay (không đợi 30s)">↻ Refresh</button>
   </div>
 </header>
 
+<section class="alerts-bar">
+  <div class="alerts-head">
+    <div class="alerts-title">Active Alerts</div>
+    <div class="alerts-count" id="alerts-count">—</div>
+  </div>
+  <div id="alerts-list"></div>
+</section>
+
 <div class="grid">
   <div class="panel">
-    <div class="panel-head"><h2>1. Latency<span class="unit">ms</span></h2></div>
+    <div class="panel-head"><h2><span class="icon">&#9201;</span>1. Latency<span class="unit">ms</span></h2></div>
+    <div class="current-value" id="cv-latency">— <span class="sub">P95 now</span></div>
     <div class="slo">SLO: P95 &lt; 3000 ms</div>
     <div class="chart-wrap"><canvas id="chart-latency"></canvas></div>
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h2>2. Traffic<span class="unit">req / min</span></h2></div>
+    <div class="panel-head"><h2><span class="icon">&#128202;</span>2. Traffic<span class="unit">req / min</span></h2></div>
+    <div class="current-value" id="cv-traffic">— <span class="sub">last bucket</span></div>
     <div class="slo">Alert: &gt; 50 req / 5m</div>
     <div class="chart-wrap"><canvas id="chart-traffic"></canvas></div>
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h2>3. Error Rate<span class="unit">%</span></h2></div>
+    <div class="panel-head"><h2><span class="icon">&#9888;</span>3. Error Rate<span class="unit">%</span></h2></div>
+    <div class="current-value" id="cv-errors">— <span class="sub">last bucket</span></div>
     <div class="slo">SLO: &lt; 2%</div>
     <div class="chart-wrap"><canvas id="chart-errors"></canvas></div>
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h2>4. Cost<span class="unit">cumulative USD · avg/req</span></h2></div>
+    <div class="panel-head"><h2><span class="icon">&#128176;</span>4. Cost<span class="unit">cumulative USD · avg/req</span></h2></div>
+    <div class="current-value" id="cv-cost">— <span class="sub">cumulative</span></div>
     <div class="slo">Budget: &lt; $20/day · Alert: avg/req &lt; $1</div>
     <div class="chart-wrap"><canvas id="chart-cost"></canvas></div>
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h2>5. Tokens<span class="unit">in / out per min</span></h2></div>
+    <div class="panel-head"><h2><span class="icon">&#128196;</span>5. Tokens<span class="unit">in / out per min</span></h2></div>
+    <div class="current-value" id="cv-tokens">— <span class="sub">last bucket</span></div>
     <div class="slo">&nbsp;</div>
     <div class="chart-wrap"><canvas id="chart-tokens"></canvas></div>
   </div>
 
   <div class="panel">
-    <div class="panel-head"><h2>6. Quality Score<span class="unit">0 – 1 avg</span></h2></div>
+    <div class="panel-head"><h2><span class="icon">&#11088;</span>6. Quality Score<span class="unit">0 – 1 avg</span></h2></div>
     <div class="slo">SLO: &gt; 0.85</div>
     <div class="gauge">
       <div class="value good" id="quality-value">—</div>
@@ -195,6 +300,170 @@ const commonPlugins = () => ({
   legend: { labels: { color: "#e6e9ef", boxWidth: 12, font: { size: 11 } }, position: "bottom" },
   tooltip: { backgroundColor: "#0f1419", titleColor: "#e6e9ef", bodyColor: "#e6e9ef", borderColor: "#2a3142", borderWidth: 1 },
 });
+
+const PANEL_SELECTORS = {
+  latency: "#chart-latency", traffic: "#chart-traffic", errors: "#chart-errors",
+  cost: "#chart-cost", tokens: "#chart-tokens", quality: "#quality-value",
+};
+
+function evaluateAlerts(buckets, metrics) {
+  const out = [];
+  const take = (n) => buckets.slice(-n);
+
+  // 1. high_latency_p95 > 3000 for 5m
+  {
+    const last = take(5);
+    const vals = last.map(([_, b]) => percentile(b.latencies, 95)).filter(v => v > 0);
+    const breached = vals.filter(v => v > 3000).length;
+    if (breached > 0) {
+      out.push({
+        name: "high_latency_p95", severity: "P2", panel: "latency",
+        status: (vals.length >= 5 && breached === vals.length) ? "firing" : "warning",
+        desc: `latency_p95 peak = ${Math.max(...vals).toFixed(0)}ms > 3000ms`,
+        duration: "5m", runbook: "docs/alerts.md#1-high-latency-p95",
+      });
+    }
+  }
+
+  // 2. high_error_rate > 2% for 5m
+  {
+    const last = take(5);
+    const vals = last.map(([_, b]) => {
+      const t = b.req + b.err;
+      return t ? (b.err / t) * 100 : 0;
+    });
+    const breached = vals.filter(v => v > 2).length;
+    if (breached > 0) {
+      out.push({
+        name: "high_error_rate", severity: "P1", panel: "errors",
+        status: (vals.length >= 5 && breached === vals.length) ? "firing" : "warning",
+        desc: `error_rate peak = ${Math.max(...vals).toFixed(1)}% > 2%`,
+        duration: "5m", runbook: "docs/alerts.md#2-high-error-rate",
+      });
+    }
+  }
+
+  // 3. cost_budget_spike avg_cost_usd > $1 for 10m
+  {
+    const last = take(10);
+    const vals = last.map(([_, b]) => b.latencies.length ? b.cost / b.latencies.length : 0)
+                    .filter(v => v > 0);
+    const breached = vals.filter(v => v > 1).length;
+    if (breached > 0) {
+      out.push({
+        name: "cost_budget_spike", severity: "P2", panel: "cost",
+        status: (vals.length >= 10 && breached === vals.length) ? "firing" : "warning",
+        desc: `avg $/req peak = $${Math.max(...vals).toFixed(3)} > $1.00`,
+        duration: "10m", runbook: "docs/alerts.md#3-cost-budget-spike",
+      });
+    }
+  }
+
+  // 4. low_quality_score < 0.85 for 15m (simplified: live /metrics.quality_avg)
+  {
+    const q = Number(metrics.quality_avg ?? 0);
+    if (q > 0 && q < 0.85) {
+      out.push({
+        name: "low_quality_score", severity: "P2", panel: "quality",
+        status: q < 0.6 ? "firing" : "warning",
+        desc: `quality_avg = ${q.toFixed(2)} < 0.85`,
+        duration: "15m", runbook: "docs/alerts.md#4-low-quality-score",
+      });
+    }
+  }
+
+  // 5. traffic_spike > 50 for 5m
+  {
+    const last = take(5);
+    const vals = last.map(([_, b]) => b.req);
+    const breached = vals.filter(v => v > 50).length;
+    if (breached > 0) {
+      out.push({
+        name: "traffic_spike", severity: "P3", panel: "traffic",
+        status: (vals.length >= 5 && breached === vals.length) ? "firing" : "warning",
+        desc: `traffic peak = ${Math.max(...vals)} req/min > 50`,
+        duration: "5m", runbook: "docs/alerts.md#5-traffic-spike",
+      });
+    }
+  }
+
+  const sevOrder = { P1: 0, P2: 1, P3: 2 };
+  out.sort((a, b) => sevOrder[a.severity] - sevOrder[b.severity]);
+  return out;
+}
+
+function renderHealth(alerts) {
+  const badge = document.getElementById("health-badge");
+  const text  = document.getElementById("health-text");
+  const firing = alerts.filter(a => a.status === "firing").length;
+  badge.classList.remove("healthy", "degraded", "critical");
+  if (firing >= 3)      { badge.classList.add("critical");  text.textContent = "Critical"; }
+  else if (firing > 0)  { badge.classList.add("degraded");  text.textContent = "Degraded"; }
+  else if (alerts.length > 0) { badge.classList.add("degraded"); text.textContent = "Warning"; }
+  else                  { badge.classList.add("healthy");   text.textContent = "Healthy"; }
+}
+
+function renderCurrentValues(buckets, metrics) {
+  const last = buckets.length ? buckets[buckets.length - 1][1] : null;
+  const fmt = (v, d=0) => v == null ? "—" : v.toFixed(d);
+
+  const latency = last ? percentile(last.latencies, 95) : 0;
+  document.getElementById("cv-latency").innerHTML =
+    `${fmt(latency, 0)} <span class="sub">ms · P95 now</span>`;
+
+  const traffic = last ? last.req : 0;
+  document.getElementById("cv-traffic").innerHTML =
+    `${traffic} <span class="sub">req · last bucket</span>`;
+
+  const errRate = last ? (() => {
+    const t = last.req + last.err; return t ? (last.err / t) * 100 : 0;
+  })() : 0;
+  document.getElementById("cv-errors").innerHTML =
+    `${errRate.toFixed(1)}% <span class="sub">last bucket</span>`;
+
+  const totalCost = Number(metrics.total_cost_usd ?? 0);
+  document.getElementById("cv-cost").innerHTML =
+    `$${totalCost.toFixed(4)} <span class="sub">cumulative · ${Number(metrics.avg_cost_usd ?? 0).toFixed(4)}/req avg</span>`;
+
+  const tIn = last ? last.tokIn : 0;
+  const tOut = last ? last.tokOut : 0;
+  document.getElementById("cv-tokens").innerHTML =
+    `${tIn.toLocaleString()} / ${tOut.toLocaleString()} <span class="sub">in / out · last bucket</span>`;
+}
+
+function renderAlerts(alerts) {
+  const list = document.getElementById("alerts-list");
+  const count = document.getElementById("alerts-count");
+
+  document.querySelectorAll(".panel-alerting").forEach(p => p.classList.remove("panel-alerting"));
+
+  if (!alerts.length) {
+    list.innerHTML = '<div class="no-alerts">&#10003; All systems operational — no active alerts</div>';
+    count.textContent = "0 active";
+    count.classList.remove("firing");
+    return;
+  }
+
+  const firing = alerts.filter(a => a.status === "firing").length;
+  count.textContent = `${alerts.length} active · ${firing} firing`;
+  count.classList.toggle("firing", firing > 0);
+
+  list.innerHTML = alerts.map(a => `
+    <div class="alert alert-${a.status}">
+      <span class="severity">${a.severity}</span>
+      <span class="name">${a.name}</span>
+      <span class="desc">${a.desc}</span>
+      <span class="duration">for ${a.duration}</span>
+      <a class="runbook" href="${a.runbook}" target="_blank">runbook &rarr;</a>
+    </div>
+  `).join("");
+
+  alerts.forEach(a => {
+    const sel = PANEL_SELECTORS[a.panel];
+    const panel = sel && document.querySelector(sel)?.closest(".panel");
+    if (panel) panel.classList.add("panel-alerting");
+  });
+}
 
 function sloLinePlugin(threshold, color) {
   return {
@@ -274,8 +543,8 @@ function initCharts() {
 async function refresh() {
   try {
     const [logsRes, metricsRes] = await Promise.all([
-      fetch(`/logs?limit=${LOG_LIMIT}`),
-      fetch("/metrics"),
+      fetch(`/logs?limit=${LOG_LIMIT}&_=${Date.now()}`, { cache: "no-store" }),
+      fetch(`/metrics?_=${Date.now()}`, { cache: "no-store" }),
     ]);
     const records = await logsRes.json();
     const metrics = await metricsRes.json();
@@ -324,6 +593,11 @@ async function refresh() {
     qEl.textContent = q.toFixed(2);
     qEl.className = "value " + (q >= 0.85 ? "good" : q >= 0.6 ? "warn" : "bad");
 
+    const alerts = evaluateAlerts(buckets, metrics);
+    renderAlerts(alerts);
+    renderHealth(alerts);
+    renderCurrentValues(buckets, metrics);
+
     document.getElementById("last-update").textContent = new Date().toLocaleTimeString();
     document.getElementById("record-count").textContent = records.length;
   } catch (e) {
@@ -334,6 +608,7 @@ async function refresh() {
 initCharts();
 refresh();
 setInterval(refresh, REFRESH_MS);
+document.getElementById("refresh-btn").addEventListener("click", refresh);
 </script>
 </body>
 </html>

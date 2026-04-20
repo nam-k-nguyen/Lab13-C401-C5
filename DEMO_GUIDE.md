@@ -14,8 +14,8 @@ uvicorn app.main:app --reload
 
 Mở sẵn 3 tab browser:
 
-1. <http://127.0.0.1:8000/dashboard> — dashboard 6 panels
-2. <https://cloud.langfuse.com> — trace list
+1. [http://127.0.0.1:8000/dashboard](http://127.0.0.1:8000/dashboard) — dashboard 6 panels
+2. [https://cloud.langfuse.com](https://cloud.langfuse.com) — trace list
 3. IDE mở `data/logs.jsonl` để show logs
 
 ## 2. Kịch bản demo chi tiết
@@ -114,13 +114,75 @@ Show output: "Score X/100 — schema PASS, correlation PASS, enrichment PASS, PI
 
 > "Observability không chỉ là cài thêm tool — là kỷ luật kết nối **logs-metrics-traces qua correlation_id** để debug incident trong **phút** chứ không phải **giờ**."
 
-## 3. Nếu demo hỏng
+## 3. Test matrix · 5 alert
+
+Dùng khi muốn verify từng alert fire đúng (cần restart uvicorn giữa các test để reset metrics):
+
+### Alert 1 · `high_latency_p95` (P2)
+
+```bash
+python scripts/inject_incident.py --scenario rag_slow
+python scripts/load_test.py --concurrency 5
+```
+
+→ RAG sleep 2.5s → P95 > 3000ms → banner fire sau ~1 phút.
+
+### Alert 2 · `high_error_rate` (P1)
+
+```bash
+python scripts/inject_incident.py --scenario tool_fail
+python scripts/load_test.py --concurrency 5
+```
+
+→ `retrieve()` throw RuntimeError → tất cả request fail → error 100% > 2%.
+
+### Alert 3 · `cost_budget_spike` (P2)
+
+```bash
+python scripts/inject_incident.py --scenario cost_spike
+python scripts/load_test.py --concurrency 5
+```
+
+→ output_tokens × 4 → avg cost/request > $1 → fire.
+
+### Alert 4 · `low_quality_score` (P2)
+
+```bash
+# Restart uvicorn để reset metrics về 0
+python scripts/inject_incident.py --scenario quality_drop
+python scripts/load_test.py --concurrency 5
+python scripts/load_test.py --concurrency 5   # chạy 2 lần để quality_avg đủ thấp
+```
+
+→ `retrieve()` trả `[]` (empty docs) → heuristic quality giảm 0.2 → avg < 0.85.
+
+### Alert 5 · `traffic_spike` (P3)
+
+```bash
+# Burst 60 request/phút — chạy load_test 6 lần song song
+for i in 1 2 3 4 5 6; do
+  python scripts/load_test.py --concurrency 10 &
+done
+wait
+```
+
+→ 60 req trong ~10s → bucket 1 phút có > 50 req → fire.
+
+### Disable tất cả incidents
+
+```bash
+for s in rag_slow tool_fail cost_spike quality_drop; do
+  python scripts/inject_incident.py --scenario $s --disable
+done
+```
+
+## 4. Nếu demo hỏng
 
 1. Dùng screenshots đã chụp trước trong `docs/screenshots/`
 2. Show `data/logs.jsonl` có sẵn (grep correlation_id, REDACTED)
 3. Chạy `python scripts/validate_logs.py` để show score
 
-## 4. Checklist cuối cùng
+## 5. Checklist cuối cùng
 
 - [ ] `validate_logs.py` ≥ 80/100
 - [ ] Langfuse ≥ 10 traces
